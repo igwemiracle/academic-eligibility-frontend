@@ -328,6 +328,13 @@ async function fetchWithAuth<T>(
     defaultHeaders["Content-Type"] = "application/json";
   }
 
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      defaultHeaders["Authorization"] = `Bearer ${token}`;
+    }
+  }
+
   if (USE_MOCKS) {
     try {
       const res = await fetch(url, {
@@ -410,6 +417,16 @@ export const api = {
       ...options,
       method: "POST",
       body: body ? JSON.stringify(body) : undefined,
+    }).then((res: any) => {
+      if (typeof window !== "undefined") {
+        if (endpoint.includes("/auth/login") && res?.token) {
+          localStorage.setItem("access_token", res.token);
+        }
+        if (endpoint.includes("/auth/logout")) {
+          localStorage.removeItem("access_token");
+        }
+      }
+      return res;
     });
   },
 
