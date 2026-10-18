@@ -14,27 +14,9 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = request.cookies.get("access_token")?.value;
-
   // Root redirect
   if (pathname === "/") {
-    if (token) {
-      // Let client router redirect to role home
-      return NextResponse.next();
-    }
     return NextResponse.redirect(new URL("/login", request.url));
-  }
-
-  // Public route
-  if (pathname === "/login") {
-    return NextResponse.next();
-  }
-
-  // Protected routes: redirect if no token
-  if (!token) {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("from", pathname);
-    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
