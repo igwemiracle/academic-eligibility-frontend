@@ -26,14 +26,16 @@ export function useLogin() {
     },
     onSuccess: (user) => {
       queryClient.setQueryData(["auth", "me"], user);
-      if (user.role === "STUDENT") {
-        router.push("/student");
-      } else if (user.role === "ADVISER") {
-        router.push("/adviser");
-      } else if (user.role === "ADMIN") {
-        router.push("/admin");
-      } else {
-        router.push("/login");
+      const target =
+        user.role === "STUDENT"
+          ? "/student"
+          : user.role === "ADVISER"
+          ? "/adviser"
+          : user.role === "ADMIN"
+          ? "/admin"
+          : "/login";
+      if (typeof window !== "undefined") {
+        window.location.href = target;
       }
     },
   });

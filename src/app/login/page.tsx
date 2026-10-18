@@ -31,8 +31,17 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await loginMutation.mutateAsync(data);
+      const user = await loginMutation.mutateAsync(data);
       toast.success("Signed in successfully");
+      const target =
+        user?.role === "STUDENT"
+          ? "/student"
+          : user?.role === "ADVISER"
+          ? "/adviser"
+          : user?.role === "ADMIN"
+          ? "/admin"
+          : "/student";
+      window.location.href = target;
     } catch (err: any) {
       toast.error(err?.message || "Invalid email or password");
     }
