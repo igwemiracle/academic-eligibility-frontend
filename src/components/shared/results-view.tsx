@@ -8,7 +8,7 @@ import {
   Award,
   Calendar,
   Layers,
-} from "lucide-react";
+} from "@/components/icons";
 import { StudentResultsResponse } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

@@ -12,7 +12,7 @@ import {
   Trash2,
   Loader2,
   Info,
-} from "lucide-react";
+} from "@/components/icons";
 import { toast } from "sonner";
 import { useAdminRequirements, useUpdateRequirements } from "@/hooks/use-admin";
 import { requirementsSchema, RequirementsFormData } from "@/lib/validation";

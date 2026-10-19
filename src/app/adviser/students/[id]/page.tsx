@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { ArrowLeft, LayoutDashboard, FileText, UserCheck } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, FileText, UserCheck } from "@/components/icons";
 import {
   useAdviserStudentProgress,
   useAdviserStudentResults,

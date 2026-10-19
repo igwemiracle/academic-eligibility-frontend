@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AlertCircle, RefreshCw, FolderSearch } from "lucide-react";
+import { AlertCircle, RefreshCw, FolderSearch } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 

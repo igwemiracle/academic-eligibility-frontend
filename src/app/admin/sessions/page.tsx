@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar, Plus, Loader2 } from "lucide-react";
+import { Calendar, Plus, Loader2 } from "@/components/icons";
 import { toast } from "sonner";
 import { useAdminSessions, useCreateSession } from "@/hooks/use-admin";
 import { sessionSchema, SessionFormData } from "@/lib/validation";

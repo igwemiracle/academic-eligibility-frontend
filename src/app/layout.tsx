@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Sora } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 
-const inter = Inter({ subsets: ["latin"] });
+const sora = Sora({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-sora",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "Academic Eligibility Tracking System",
-  description: "Graduation Status Monitoring for Computer Science Department",
+  title: "Computer Science Eligibility Tracker",
+  description: "Academic Eligibility Tracking System for Graduation Status Monitoring - Department of Computer Science",
 };
 
 export default function RootLayout({
@@ -16,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning className={sora.variable}>
+      <body className={`${sora.className} font-sans antialiased selection:bg-primary/20 selection:text-primary`}>
         <Providers>{children}</Providers>
       </body>
     </html>

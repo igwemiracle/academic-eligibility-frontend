@@ -13,7 +13,7 @@ import {
   CheckCircle2,
   XCircle,
   Loader2,
-} from "lucide-react";
+} from "@/components/icons";
 import { toast } from "sonner";
 import {
   useAdminCourses,

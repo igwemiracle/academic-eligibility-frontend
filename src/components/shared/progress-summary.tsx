@@ -11,7 +11,7 @@ import {
   Calendar,
   AlertOctagon,
   ArrowUpRight,
-} from "lucide-react";
+} from "@/components/icons";
 import { ProgressSummary } from "@/lib/types";
 import { formatCgpa, formatUnits } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";

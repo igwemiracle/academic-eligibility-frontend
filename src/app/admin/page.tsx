@@ -14,7 +14,7 @@ import {
   History,
   ArrowRight,
   TrendingUp,
-} from "lucide-react";
+} from "@/components/icons";
 import {
   BarChart,
   Bar,

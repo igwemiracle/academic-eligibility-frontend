@@ -19,7 +19,8 @@ import {
   Menu,
   ShieldCheck,
   UserCheck,
-} from "lucide-react";
+  HelpCircle,
+} from "@/components/icons";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 import { Role } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -38,7 +39,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 interface NavItem {
   title: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: React.ComponentType<{ className?: string; size?: number | string }>;
   roles: Role[];
 }
 
@@ -114,6 +115,14 @@ const NAV_ITEMS: NavItem[] = [
     icon: History,
     roles: ["ADMIN"],
   },
+
+  // Shared Help & Guide link for all roles
+  {
+    title: "Help & Guide",
+    href: "/help",
+    icon: HelpCircle,
+    roles: ["STUDENT", "ADVISER", "ADMIN"],
+  },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -157,26 +166,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     : "U";
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-64 flex-col border-r bg-card/60 backdrop-blur-sm">
+    <div className="flex h-[100dvh] w-full overflow-hidden bg-background text-foreground font-sans print:h-auto print:overflow-visible">
+      {/* Desktop Sidebar - fixed 100dvh with internal scroll container */}
+      <aside className="hidden md:flex w-64 h-[100dvh] shrink-0 flex-col border-r border-border bg-card overflow-y-auto print:hidden">
         {/* Brand Header */}
-        <div className="flex h-16 items-center gap-3 border-b px-6">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+        <div className="flex h-16 items-center gap-3 border-b border-border px-5 shrink-0">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs">
             <GraduationCap className="h-5 w-5" />
           </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-sm leading-tight text-foreground">
-              Academic Eligibility
+          <div className="flex flex-col min-w-0">
+            <span className="font-bold text-xs leading-tight tracking-tight text-foreground truncate">
+              Computer Science
             </span>
-            <span className="text-xs text-muted-foreground">
-              Dept. of Computer Science
+            <span className="text-[11px] font-medium text-primary">
+              Eligibility Tracker
             </span>
           </div>
         </div>
 
         {/* Navigation Links */}
-        <nav className="flex-1 space-y-1.5 p-4" aria-label="Main Navigation">
+        <nav className="flex-1 space-y-1.5 p-3" aria-label="Main Navigation">
           {userNavItems.map((item) => {
             const Icon = item.icon;
             const isActive =
@@ -184,6 +193,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               (item.href !== "/student" &&
                 item.href !== "/adviser" &&
                 item.href !== "/admin" &&
+                item.href !== "/help" &&
                 pathname.startsWith(item.href));
 
             return (
@@ -191,41 +201,44 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                  "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all",
                   isActive
-                    ? "bg-primary text-primary-foreground shadow-xs"
-                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                    ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" />
-                <span>{item.title}</span>
+                <Icon className={cn("h-4 w-4 shrink-0", isActive ? "text-primary-foreground" : "text-muted-foreground")} />
+                <span className="truncate">{item.title}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* User Card in Sidebar Bottom */}
-        <div className="border-t p-4">
-          <div className="flex items-center gap-3 rounded-lg border bg-muted/40 p-3">
-            <Avatar className="h-9 w-9">
-              <AvatarFallback>{userInitials}</AvatarFallback>
+        {/* Sidebar Footer Info */}
+        <div className="border-t border-border p-3 space-y-2.5 shrink-0 bg-muted/20">
+          <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-2.5 shadow-xs">
+            <Avatar className="h-8 w-8 rounded-lg bg-primary/10 text-primary">
+              <AvatarFallback className="text-xs font-bold text-primary">{userInitials}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col min-w-0 flex-1">
               <span className="truncate text-xs font-semibold text-foreground">
                 {user?.fullName || "Authenticated User"}
               </span>
-              <span className="truncate text-[11px] text-muted-foreground">
+              <span className="truncate text-[10px] text-muted-foreground">
                 {user?.matricNumber || user?.email}
               </span>
             </div>
           </div>
+          <p className="text-[10px] text-muted-foreground leading-tight px-1">
+            Prototype built for the Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Not an official university system.
+          </p>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex flex-1 flex-col min-w-0 h-[100dvh] overflow-hidden print:h-auto print:overflow-visible">
         {/* Top Navbar */}
-        <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-background/95 px-4 sm:px-6 backdrop-blur-sm">
+        <header className="shrink-0 flex h-16 items-center justify-between border-b border-border bg-card/95 px-4 sm:px-6 backdrop-blur-md z-30 print:hidden">
           <div className="flex items-center gap-3">
             {/* Mobile Sheet Trigger */}
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -233,29 +246,29 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Button
                   variant="outline"
                   size="icon"
-                  className="md:hidden"
+                  className="md:hidden rounded-xl"
                   aria-label="Open mobile navigation menu"
                 >
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-72 p-0">
-                <SheetHeader className="border-b p-6 text-left">
+              <SheetContent side="left" className="w-72 p-0 flex flex-col h-full">
+                <SheetHeader className="border-b border-border p-5 text-left shrink-0">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
                       <GraduationCap className="h-5 w-5" />
                     </div>
                     <div>
-                      <SheetTitle className="text-sm font-semibold">
-                        Academic Eligibility
+                      <SheetTitle className="text-xs font-bold text-foreground">
+                        Computer Science Eligibility Tracker
                       </SheetTitle>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground">
                         Dept. of Computer Science
                       </p>
                     </div>
                   </div>
                 </SheetHeader>
-                <nav className="space-y-1.5 p-4">
+                <nav className="flex-1 space-y-1.5 p-3 overflow-y-auto">
                   {userNavItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = pathname === item.href;
@@ -265,10 +278,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className={cn(
-                          "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
+                          "flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all",
                           isActive
-                            ? "bg-primary text-primary-foreground"
-                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                            ? "bg-primary text-primary-foreground font-semibold"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                         )}
                       >
                         <Icon className="h-4 w-4" />
@@ -277,26 +290,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     );
                   })}
                 </nav>
+                <div className="border-t border-border p-4 bg-muted/20 shrink-0">
+                  <p className="text-[10px] text-muted-foreground leading-tight">
+                    Prototype built for the Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Not an official university system.
+                  </p>
+                </div>
               </SheetContent>
             </Sheet>
 
-            {/* Department Label */}
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-sm font-medium text-foreground">
+            {/* Department Wordmark in Header */}
+            <div className="flex items-center gap-2">
+              <span className="font-semibold text-xs sm:text-sm text-foreground">
                 Graduation Monitoring Portal
               </span>
               <span className="text-muted-foreground text-xs">•</span>
-              <span className="text-xs text-muted-foreground">Session 2023/2024</span>
+              <span className="text-xs text-muted-foreground hidden sm:inline">Session 2023/2024</span>
             </div>
           </div>
 
           {/* Top Right Controls */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             {/* User Role Badge */}
             {user && (
               <Badge
                 variant={getRoleBadgeVariant(user.role) as any}
-                className="hidden sm:inline-flex items-center gap-1.5 font-medium text-xs py-1"
+                className="hidden sm:inline-flex items-center gap-1.5 font-medium text-xs py-1 rounded-lg"
               >
                 {user.role === "ADMIN" && <ShieldCheck className="h-3 w-3" />}
                 {user.role === "ADVISER" && <UserCheck className="h-3 w-3" />}
@@ -313,7 +331,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               size="sm"
               onClick={() => logoutMutation.mutate()}
               disabled={logoutMutation.isPending}
-              className="gap-2 text-xs font-medium"
+              className="gap-2 text-xs font-medium rounded-xl hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30"
               aria-label="Log out of application"
             >
               <LogOut className="h-3.5 w-3.5" />
@@ -322,8 +340,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        {/* Page Content Viewport */}
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
+        {/* Scrollable Page Content Viewport */}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto print:overflow-visible print:p-0 print:m-0 print:max-w-none">
           {children}
         </main>
       </div>

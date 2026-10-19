@@ -16,6 +16,9 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sora)", "system-ui", "-apple-system", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -50,6 +53,26 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        jostum: {
+          deep: "#054635",
+          darkest: "#022F24",
+          primary: "#125745",
+          bright: "#0A8760",
+          orange: "#EF960A",
+          orangeDark: "#DF7F07",
+          gold: "#F5B62D",
+          surface: "#F4F8F6",
+          card: "#FFFFFF",
+          border: "#DCE7E1",
+          softTint: "#E4F1EB",
+          text: "#0F2A22",
+        },
+        status: {
+          eligibleText: "#0A8760",
+          eligibleBg: "#E4F5EE",
+          ineligibleText: "#B45309",
+          ineligibleBg: "#FEF3C7",
+        },
         chart: {
           1: "hsl(var(--chart-1))",
           2: "hsl(var(--chart-2))",
@@ -59,6 +82,7 @@ const config: Config = {
         },
       },
       borderRadius: {
+        xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",

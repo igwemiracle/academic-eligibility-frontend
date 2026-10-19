@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FileText } from "lucide-react";
+import { FileText } from "@/components/icons";
 import { useStudentResults } from "@/hooks/use-student";
 import { ErrorState } from "@/components/shared/state-indicators";
 import { Skeleton } from "@/components/ui/skeleton";

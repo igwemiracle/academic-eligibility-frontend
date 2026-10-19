@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GraduationCap, Lock, Mail, Loader2, ArrowRight } from "lucide-react";
+import { GraduationCap, Lock, Mail, Loader2, ArrowRight } from "@/components/icons";
 import { toast } from "sonner";
 import { loginSchema, LoginFormData } from "@/lib/validation";
 import { useLogin } from "@/hooks/use-auth";
@@ -66,7 +66,7 @@ export default function LoginPage() {
             <GraduationCap className="h-8 w-8" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Department of Computer Science
+            Computer Science Eligibility Tracker
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">
             Academic Eligibility Tracking System for Graduation Status Monitoring
@@ -213,8 +213,8 @@ export default function LoginPage() {
         </Card>
 
         {/* Footer Note */}
-        <p className="text-center text-xs text-muted-foreground">
-          Academic Eligibility Tracking System • Computer Science Dept.
+        <p className="text-center text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
+          Prototype built for the Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Not an official university system.
         </p>
       </div>
     </div>

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { format } from "date-fns";
-import { History, Shield, ChevronLeft, ChevronRight, User } from "lucide-react";
+import { History, Shield, ChevronLeft, ChevronRight, User } from "@/components/icons";
 import { useAdminAuditLogs } from "@/hooks/use-admin";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

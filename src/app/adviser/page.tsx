@@ -12,7 +12,7 @@ import {
   ChevronRight,
   ArrowRight,
   GraduationCap,
-} from "lucide-react";
+} from "@/components/icons";
 import { useAdviserStudents } from "@/hooks/use-adviser";
 import { formatCgpa } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

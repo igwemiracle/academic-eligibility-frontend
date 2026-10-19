@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
-import { ShieldAlert, LogOut, ArrowRight } from "lucide-react";
+import { ShieldAlert, LogOut, ArrowRight } from "@/components/icons";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 import { Role } from "@/lib/types";
 import { Button } from "@/components/ui/button";

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Shield, Loader2, CheckCircle2 } from "lucide-react";
+import { Lock, Shield, Loader2, CheckCircle2 } from "@/components/icons";
 import { toast } from "sonner";
 import { changePasswordSchema, ChangePasswordFormData } from "@/lib/validation";
 import { useChangePassword } from "@/hooks/use-auth";
