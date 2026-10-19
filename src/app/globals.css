@@ -29,6 +29,25 @@
     --chart-3: 38 92% 50%;
     --chart-4: 262 83% 58%;
     --chart-5: 0 84% 60%;
+
+    /* Arc UI tokens */
+    --surface: hsl(var(--card));
+    --surface-muted: hsl(var(--muted));
+    --border-subtle: hsl(var(--border) / 0.6);
+    --border-strong: hsl(var(--border));
+    --text-muted: hsl(var(--muted-foreground));
+    --text-secondary: hsl(var(--muted-foreground));
+    --radius-control: var(--radius);
+    --control-glyph: hsl(var(--foreground));
+    --control-on: hsl(var(--primary));
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --leading-body: 1.5;
+    --tracking-body: normal;
   }
 
   .dark {
@@ -56,6 +75,16 @@
     --chart-3: 38 90% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Arc UI dark tokens */
+    --surface: hsl(var(--card));
+    --surface-muted: hsl(var(--muted));
+    --border-subtle: hsl(var(--border) / 0.6);
+    --border-strong: hsl(var(--border));
+    --text-muted: hsl(var(--muted-foreground));
+    --text-secondary: hsl(var(--muted-foreground));
+    --control-glyph: hsl(var(--foreground));
+    --control-on: hsl(var(--primary));
   }
 }
 

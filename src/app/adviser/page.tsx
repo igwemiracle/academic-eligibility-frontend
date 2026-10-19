@@ -12,9 +12,12 @@ import {
   ChevronRight,
   ArrowRight,
   GraduationCap,
+  Award,
+  BookOpen,
 } from "@/components/icons";
 import { useAdviserStudents } from "@/hooks/use-adviser";
 import { formatCgpa } from "@/lib/utils";
+import { StudentListItem } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -26,16 +29,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { ErrorState, EmptyState } from "@/components/shared/state-indicators";
 import { Skeleton } from "@/components/ui/skeleton";
+import { GettingStartedCard } from "@/components/shared/getting-started-card";
+import { SortableDataTable, DataColumn } from "@/components/arc/sortable-data-table/sortable-data-table";
 
 export default function AdviserPage() {
   const [search, setSearch] = React.useState("");
@@ -54,44 +51,188 @@ export default function AdviserPage() {
 
   const totalPages = data ? Math.max(1, Math.ceil(data.total / pageSize)) : 1;
 
+  // Compute summary stats from current cohort
+  const eligibleCount = React.useMemo(() => {
+    if (!data?.items) return 0;
+    return data.items.filter((s) => s.status === "ELIGIBLE").length;
+  }, [data?.items]);
+
+  const notYetEligibleCount = React.useMemo(() => {
+    if (!data?.items) return 0;
+    return data.items.filter((s) => s.status === "NOT_YET_ELIGIBLE").length;
+  }, [data?.items]);
+
+  const columns: DataColumn<StudentListItem>[] = React.useMemo(
+    () => [
+      {
+        key: "fullName",
+        label: "Student Name",
+        sortable: true,
+        render: (_, row) => (
+          <div className="py-1">
+            <Link
+              href={`/adviser/students/${row.studentId}`}
+              className="font-semibold text-foreground hover:text-jostum-primary hover:underline text-sm block"
+            >
+              {row.fullName}
+            </Link>
+          </div>
+        ),
+      },
+      {
+        key: "matricNumber",
+        label: "Matric Number",
+        sortable: true,
+        render: (_, row) => (
+          <span className="font-mono text-xs font-medium text-muted-foreground">
+            {row.matricNumber}
+          </span>
+        ),
+      },
+      {
+        key: "level",
+        label: "Level",
+        sortable: true,
+        numeric: true,
+        render: (_, row) => (
+          <Badge variant="outline" className="font-mono text-xs">
+            {row.level}L
+          </Badge>
+        ),
+      },
+      {
+        key: "cgpa",
+        label: "CGPA",
+        sortable: true,
+        numeric: true,
+        render: (_, row) => (
+          <span className="font-mono text-xs font-bold text-foreground">
+            {formatCgpa(row.cgpa)}
+          </span>
+        ),
+      },
+      {
+        key: "totalUnitsEarned",
+        label: "Units Earned",
+        sortable: true,
+        numeric: true,
+        render: (_, row) => (
+          <span className="font-mono text-xs font-semibold text-foreground">
+            {row.totalUnitsEarned}
+          </span>
+        ),
+      },
+      {
+        key: "status",
+        label: "Graduation Status",
+        sortable: true,
+        render: (_, row) => {
+          const isEligible = row.status === "ELIGIBLE";
+          return (
+            <span
+              className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
+                isEligible
+                  ? "bg-[#E4F5EE] text-[#0A8760] dark:bg-emerald-950/50 dark:text-emerald-300"
+                  : "bg-[#FEF3C7] text-[#B45309] dark:bg-amber-950/50 dark:text-amber-300"
+              }`}
+            >
+              {isEligible ? (
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
+                  Eligible
+                </>
+              ) : (
+                <>
+                  <AlertTriangle className="h-3.5 w-3.5 shrink-0" />
+                  Not Yet Eligible
+                </>
+              )}
+            </span>
+          );
+        },
+      },
+      {
+        key: "actions",
+        label: "Action",
+        sortable: false,
+        render: (_, row) => (
+          <Button
+            variant="ghost"
+            size="sm"
+            asChild
+            className="h-8 gap-1 text-xs text-jostum-primary hover:text-jostum-primary hover:bg-jostum-soft/40"
+          >
+            <Link href={`/adviser/students/${row.studentId}`}>
+              Audit <ArrowRight className="h-3 w-3" />
+            </Link>
+          </Button>
+        ),
+      },
+    ],
+    []
+  );
+
   return (
     <div className="space-y-6">
-      {/* Page Title Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+      {/* Adviser Getting Started Guide Card */}
+      <div className="no-print">
+        <GettingStartedCard role="adviser" />
+      </div>
+
+      {/* Page Title & KPI Banner */}
+      <div className="rounded-2xl border border-jostum-primary/20 bg-gradient-to-r from-jostum-deep via-jostum-primary to-jostum-bright p-6 text-white shadow-sm">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs text-jostum-gold">
+              <Users className="h-3.5 w-3.5" />
+              <span>Academic Advisory Portal</span>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
               Assigned Students Roster
             </h1>
+            <p className="text-xs text-white/80 sm:text-sm max-w-xl">
+              Audit credit units completion, check outstanding courses, and verify graduation clearance status.
+            </p>
           </div>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Monitor academic progress and graduation eligibility for students under your advisory.
-          </p>
-        </div>
 
-        {data && (
-          <Badge variant="outline" className="w-fit text-xs font-medium px-3 py-1">
-            {data.total} Total Student{data.total === 1 ? "" : "s"} Assigned
-          </Badge>
-        )}
+          {data && (
+            <div className="flex items-center gap-3">
+              <div className="rounded-xl bg-white/10 p-3 backdrop-blur-xs border border-white/15 text-center min-w-[100px]">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-white/70 block">
+                  Total Cohort
+                </span>
+                <span className="text-xl font-extrabold text-white font-mono">
+                  {data.total}
+                </span>
+              </div>
+              <div className="rounded-xl bg-white/10 p-3 backdrop-blur-xs border border-white/15 text-center min-w-[100px]">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-jostum-gold block">
+                  Eligible (Page)
+                </span>
+                <span className="text-xl font-extrabold text-white font-mono">
+                  {eligibleCount}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Filters Card */}
-      <Card className="border shadow-xs">
+      <Card className="border border-border/80 shadow-xs">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Search Input */}
             <div className="relative">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search by name or matric number..."
+                placeholder="Search by student name or matric..."
                 value={search}
                 onChange={(e) => {
                   setSearch(e.target.value);
                   setPage(1);
                 }}
-                className="pl-9 h-10"
+                className="pl-9 h-10 text-xs"
                 aria-label="Search students by name or matric number"
               />
             </div>
@@ -105,7 +246,7 @@ export default function AdviserPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-10" aria-label="Filter by level">
+                <SelectTrigger className="h-10 text-xs" aria-label="Filter by level">
                   <SelectValue placeholder="All Levels" />
                 </SelectTrigger>
                 <SelectContent>
@@ -127,13 +268,13 @@ export default function AdviserPage() {
                   setPage(1);
                 }}
               >
-                <SelectTrigger className="h-10" aria-label="Filter by status">
+                <SelectTrigger className="h-10 text-xs" aria-label="Filter by status">
                   <SelectValue placeholder="All Eligibility Statuses" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="ALL">All Statuses</SelectItem>
-                  <SelectItem value="ELIGIBLE">Eligible</SelectItem>
-                  <SelectItem value="NOT_YET_ELIGIBLE">Not Yet Eligible</SelectItem>
+                  <SelectItem value="ELIGIBLE">Eligible Only</SelectItem>
+                  <SelectItem value="NOT_YET_ELIGIBLE">Not Yet Eligible Only</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -141,7 +282,7 @@ export default function AdviserPage() {
         </CardContent>
       </Card>
 
-      {/* Students Table */}
+      {/* Students Sortable Table */}
       {isLoading ? (
         <Card className="border shadow-xs">
           <div className="p-6 space-y-4">
@@ -154,7 +295,7 @@ export default function AdviserPage() {
         </Card>
       ) : error ? (
         <ErrorState
-          title="Could not load student list"
+          title="Could not load student roster"
           message={
             (error as any)?.message ||
             "An error occurred while fetching your assigned students."
@@ -185,81 +326,16 @@ export default function AdviserPage() {
           }
         />
       ) : (
-        <Card className="border shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-muted/40">
-                  <TableHead>Student Name</TableHead>
-                  <TableHead className="w-[140px]">Matric Number</TableHead>
-                  <TableHead className="w-[80px] text-center">Level</TableHead>
-                  <TableHead className="w-[100px] text-center">CGPA</TableHead>
-                  <TableHead className="w-[110px] text-center">Units Earned</TableHead>
-                  <TableHead className="w-[150px] text-center">Eligibility Status</TableHead>
-                  <TableHead className="w-[110px] text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {data.items.map((student) => {
-                  const isEligible = student.status === "ELIGIBLE";
-                  return (
-                    <TableRow key={student.studentId} className="hover:bg-muted/30">
-                      <TableCell className="font-medium text-foreground">
-                        <Link
-                          href={`/adviser/students/${student.studentId}`}
-                          className="hover:underline text-primary"
-                        >
-                          {student.fullName}
-                        </Link>
-                      </TableCell>
-                      <TableCell className="font-mono text-xs text-muted-foreground">
-                        {student.matricNumber}
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs">
-                        {student.level}L
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs font-semibold">
-                        {formatCgpa(student.cgpa)}
-                      </TableCell>
-                      <TableCell className="text-center font-mono text-xs">
-                        {student.totalUnitsEarned}
-                      </TableCell>
-                      <TableCell className="text-center">
-                        <Badge
-                          variant={isEligible ? "success" : "warning"}
-                          className="text-[11px] font-semibold gap-1"
-                        >
-                          {isEligible ? (
-                            <>
-                              <CheckCircle2 className="h-3 w-3" />
-                              Eligible
-                            </>
-                          ) : (
-                            <>
-                              <AlertTriangle className="h-3 w-3" />
-                              Not Yet Eligible
-                            </>
-                          )}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          asChild
-                          className="h-8 gap-1 text-xs"
-                        >
-                          <Link href={`/adviser/students/${student.studentId}`}>
-                            View
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </Link>
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+        <Card className="border border-border/80 shadow-xs overflow-hidden">
+          <div className="p-2 sm:p-4">
+            <SortableDataTable<StudentListItem>
+              rows={data.items}
+              columns={columns}
+              rowKey="studentId"
+              caption="Assigned undergraduate students graduation eligibility roster"
+              emptyMessage="No students match the criteria."
+              defaultSort={{ key: "fullName", direction: "asc" }}
+            />
           </div>
 
           {/* Pagination Controls */}

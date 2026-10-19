@@ -170,6 +170,7 @@ export const ArrowUpRight = createIcon(ArrowRight01Icon, "ArrowUpRight");
 export const ArrowLeft = createIcon(ArrowLeft01Icon, "ArrowLeft");
 export const ChevronDown = createIcon(ArrowDown01Icon, "ChevronDown");
 export const ChevronUp = createIcon(ArrowUp01Icon, "ChevronUp");
+export const ArrowUp = createIcon(ArrowUp01Icon, "ArrowUp");
 export const ChevronRight = createIcon(ArrowRight01Icon, "ChevronRight");
 export const ChevronLeft = createIcon(ArrowLeft01Icon, "ChevronLeft");
 export const Search = createIcon(Search01Icon, "Search");
