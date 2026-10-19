@@ -168,13 +168,26 @@ export type Requirements = {
 export type AuditLog = {
   id: string;
   action: string;
-  performedBy: {
+  actorId?: string;
+  actor?: {
     id: string;
     fullName: string;
     email: string;
-  };
-  details: string;
-  timestamp: string;
+    role?: string;
+  } | null;
+  performedBy?: {
+    id: string;
+    fullName: string;
+    email: string;
+    role?: string;
+  } | null;
+  entity?: string;
+  entityId?: string;
+  before?: unknown;
+  after?: unknown;
+  details?: string;
+  createdAt?: string;
+  timestamp?: string;
 };
 
 export type AuditLogsResponse = {

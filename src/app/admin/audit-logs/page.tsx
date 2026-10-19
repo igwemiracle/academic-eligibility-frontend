@@ -83,11 +83,25 @@ export default function AdminAuditLogsPage() {
               </TableHeader>
               <TableBody>
                 {data.items.map((log) => {
-                  let formattedDate = log.timestamp;
-                  try {
-                    formattedDate = format(new Date(log.timestamp), "MMM dd, yyyy HH:mm:ss");
-                  } catch {
-                    // fallback to raw
+                  const dateVal = log.createdAt || log.timestamp;
+                  let formattedDate = dateVal || "—";
+                  if (dateVal) {
+                    try {
+                      formattedDate = format(new Date(dateVal), "MMM dd, yyyy HH:mm:ss");
+                    } catch {
+                      // fallback to raw
+                    }
+                  }
+
+                  const actor = log.actor || log.performedBy;
+                  const actorName = actor?.fullName || "System Administrator";
+                  const actorEmail = actor?.email || "system@cs.edu.ng";
+
+                  let detailsText = log.details;
+                  if (!detailsText && log.entity) {
+                    detailsText = `${log.entity} (${log.entityId || "N/A"})`;
+                  } else if (!detailsText) {
+                    detailsText = "Administrative action completed";
                   }
 
                   return (
@@ -102,21 +116,21 @@ export default function AdminAuditLogsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full bg-jostum-soft/60 text-jostum-primary dark:bg-jostum-primary/20">
                             <User className="h-3.5 w-3.5" />
                           </div>
                           <div className="flex flex-col min-w-0">
                             <span className="text-xs font-semibold text-foreground truncate">
-                              {log.performedBy.fullName}
+                              {actorName}
                             </span>
                             <span className="text-[11px] text-muted-foreground font-mono truncate">
-                              {log.performedBy.email}
+                              {actorEmail}
                             </span>
                           </div>
                         </div>
                       </TableCell>
                       <TableCell className="text-xs text-foreground">
-                        {log.details}
+                        {detailsText}
                       </TableCell>
                     </TableRow>
                   );
