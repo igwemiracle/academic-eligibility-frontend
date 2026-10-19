@@ -19,8 +19,17 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useCurrentUser } from "@/hooks/use-auth";
 
 export default function HelpPage() {
+  const { data: user } = useCurrentUser();
+  const dashboardHref =
+    user?.role === "ADMIN"
+      ? "/admin"
+      : user?.role === "ADVISER"
+      ? "/adviser"
+      : "/student";
+
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Page Header */}
@@ -45,7 +54,7 @@ export default function HelpPage() {
               asChild
               className="bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs gap-1.5"
             >
-              <Link href="/student">
+              <Link href={dashboardHref}>
                 Back to Dashboard <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </Button>
