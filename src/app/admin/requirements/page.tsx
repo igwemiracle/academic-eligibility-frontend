@@ -145,7 +145,7 @@ export default function AdminRequirementsPage() {
       {/* Header */}
       <div className="space-y-1">
         <div className="flex items-center gap-2">
-          <Sliders className="h-6 w-6 text-primary" />
+          <Sliders className="h-6 w-6 text-jostum-primary" />
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Graduation Requirements & Evaluation Policy
           </h1>

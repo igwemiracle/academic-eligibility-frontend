@@ -63,7 +63,7 @@ export default function AdminSessionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-primary" />
+            <Calendar className="h-6 w-6 text-jostum-primary" />
             <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Academic Sessions
             </h1>
