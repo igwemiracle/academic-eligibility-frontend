@@ -8,10 +8,12 @@ import {
   Award,
   Calendar,
   Layers,
+  Printer,
 } from "@/components/icons";
-import { StudentResultsResponse } from "@/lib/types";
+import { StudentResultsResponse, ProgressSummary } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -28,9 +30,9 @@ function getGradeBadgeVariant(grade: string) {
     case "A":
       return "success";
     case "B":
-      return "info";
-    case "C":
       return "secondary";
+    case "C":
+      return "outline";
     case "D":
     case "E":
       return "warning";
@@ -43,11 +45,18 @@ function getGradeBadgeVariant(grade: string) {
 
 interface ResultsViewProps {
   resultsData: StudentResultsResponse;
+  student?: ProgressSummary["student"];
   subtitle?: string;
 }
 
-export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
+export function ResultsView({ resultsData, student, subtitle }: ResultsViewProps) {
   const { sessions } = resultsData;
+
+  const handlePrint = () => {
+    if (typeof window !== "undefined") {
+      window.print();
+    }
+  };
 
   if (!sessions || sessions.length === 0) {
     return (
@@ -76,15 +85,60 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
 
   return (
     <div className="space-y-8">
-      {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+      {/* Print-Only Official Header */}
+      <div className="print-only print-header">
+        <h1 className="text-xl font-bold uppercase tracking-wider text-slate-900">
+          Joseph Sarwuan Tarka University, Makurdi
+        </h1>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700">
+          Department of Computer Science
+        </h2>
+        <h3 className="text-xs font-medium uppercase tracking-wider text-slate-600 mt-1">
+          Official Student Semester Examination Results Breakdown (Unofficial Copy)
+        </h3>
+        {student && (
+          <div className="mt-3 grid grid-cols-2 text-left text-xs border-t pt-2 gap-y-1">
+            <div><strong>Student Name:</strong> {student.fullName}</div>
+            <div><strong>Matric Number:</strong> {student.matricNumber}</div>
+            <div><strong>Department:</strong> {student.department}</div>
+            <div><strong>Current Level:</strong> {student.level} Level</div>
+            <div><strong>Entry Mode:</strong> {student.entryMode === "DIRECT_ENTRY" ? "Direct Entry (DE)" : "UTME (100L)"}</div>
+            <div><strong>Date Generated:</strong> {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</div>
+          </div>
+        )}
+      </div>
+
+      {/* Screen Toolbar: Print Button & Meta */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 no-print border-b pb-4">
+        <div>
+          {subtitle ? (
+            <p className="text-sm text-muted-foreground">{subtitle}</p>
+          ) : (
+            <p className="text-sm text-muted-foreground">
+              Official course examination marks arranged chronologically by academic session and semester.
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handlePrint}
+            variant="outline"
+            size="sm"
+            className="text-xs gap-1.5 shadow-xs bg-card hover:bg-muted"
+          >
+            <Printer className="h-3.5 w-3.5 text-jostum-primary" />
+            Print / Save as PDF
+          </Button>
+        </div>
+      </div>
 
       {/* Sessions and Semesters */}
       <div className="space-y-8">
         {sessions.map((sessionItem, sessionIndex) => (
-          <div key={sessionItem.session.id || sessionIndex} className="space-y-6">
+          <div key={sessionItem.session.id || sessionIndex} className="space-y-6 print-card">
             {/* Session Header */}
             <div className="flex items-center gap-3 border-b pb-2">
-              <Calendar className="h-5 w-5 text-primary" />
+              <Calendar className="h-5 w-5 text-jostum-primary" />
               <h3 className="text-lg font-bold tracking-tight text-foreground sm:text-xl">
                 Session: {sessionItem.session.name}
               </h3>
@@ -95,12 +149,12 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
               {sessionItem.semesters.map((semesterItem) => (
                 <Card
                   key={semesterItem.semester}
-                  className="border shadow-xs overflow-hidden"
+                  className="border shadow-xs overflow-hidden print-card"
                 >
                   <CardHeader className="bg-muted/30 py-3.5 px-4 sm:px-6 border-b">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
-                        <Layers className="h-4 w-4 text-primary" />
+                        <Layers className="h-4 w-4 text-jostum-primary" />
                         <CardTitle className="text-sm font-semibold sm:text-base">
                           {semesterItem.semester === 1
                             ? "First Semester Examination Results"
@@ -136,7 +190,7 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
                                 <TableCell className="font-mono font-medium text-xs">
                                   {result.course.code}
                                   {result.course.isCompulsory && (
-                                    <span className="ml-1 text-[10px] text-primary font-sans font-bold">
+                                    <span className="ml-1 text-[10px] text-jostum-primary font-sans font-bold" title="Compulsory Course">
                                       *
                                     </span>
                                   )}
@@ -209,7 +263,7 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
                               {semesterItem.tpe}
                             </span>
                           </div>
-                          <div className="flex items-center gap-1.5 rounded-md bg-primary/10 px-2.5 py-1 text-primary">
+                          <div className="flex items-center gap-1.5 rounded-md bg-jostum-primary/10 px-2.5 py-1 text-jostum-primary dark:bg-jostum-primary/20">
                             <span className="font-medium">Semester GPA:</span>
                             <span className="font-mono font-bold">
                               {formatCgpa(semesterItem.gpa)}
@@ -226,13 +280,13 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
         ))}
       </div>
 
-      {/* Cumulative Cumulative Computation Box (Handbook Sample Layout) */}
-      <Card className="border-2 border-primary/30 bg-primary/5 shadow-md">
+      {/* Cumulative Computation Box */}
+      <Card className="border-2 border-jostum-primary/30 bg-jostum-soft/30 dark:bg-jostum-primary/10 shadow-sm print-card">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <Award className="h-5 w-5 text-primary" />
+            <Award className="h-5 w-5 text-jostum-primary" />
             <CardTitle className="text-base font-bold sm:text-lg">
-              Cumulative Academic Record (Handbook Summary Computation)
+              Cumulative Academic Record (Summary Computation)
             </CardTitle>
           </div>
         </CardHeader>
@@ -268,7 +322,7 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
               <span className="text-[11px] text-muted-foreground">Total grade points</span>
             </div>
 
-            <div className="rounded-lg border-2 border-primary bg-primary text-primary-foreground p-3 shadow-sm">
+            <div className="rounded-lg border-2 border-jostum-primary bg-jostum-primary text-white p-3 shadow-sm">
               <span className="text-xs font-bold uppercase tracking-wider block opacity-90">
                 CGPA (CPE / CCC)
               </span>
@@ -280,6 +334,16 @@ export function ResultsView({ resultsData, subtitle }: ResultsViewProps) {
           </div>
         </CardContent>
       </Card>
+
+      {/* Print-Only Official Footer */}
+      <div className="print-only print-footer">
+        <p className="leading-relaxed">
+          This is an unofficial student record generated by the Academic Eligibility Tracking System for advising purposes only. Official clearance is granted solely by the University Senate and Department Examination Officer.
+        </p>
+        <p className="text-[7pt] mt-1 text-slate-500">
+          Joseph Sarwuan Tarka University, Makurdi • Department of Computer Science Eligibility Portal
+        </p>
+      </div>
     </div>
   );
 }

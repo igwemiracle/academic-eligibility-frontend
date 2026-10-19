@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useStudentProgress } from "@/hooks/use-student";
 import { ProgressSummaryView } from "@/components/shared/progress-summary";
+import { GettingStartedCard } from "@/components/shared/getting-started-card";
 import { DashboardSkeleton, ErrorState } from "@/components/shared/state-indicators";
 
 export default function StudentDashboardPage() {
@@ -25,5 +26,12 @@ export default function StudentDashboardPage() {
     );
   }
 
-  return <ProgressSummaryView summary={progress} isAdviserView={false} />;
+  return (
+    <div className="space-y-6">
+      <div className="no-print">
+        <GettingStartedCard role="student" />
+      </div>
+      <ProgressSummaryView summary={progress} isAdviserView={false} />
+    </div>
+  );
 }

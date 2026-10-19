@@ -1,16 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { FileText } from "@/components/icons";
-import { useStudentResults } from "@/hooks/use-student";
+import { FileText, Printer } from "@/components/icons";
+import { useStudentResults, useStudentProgress } from "@/hooks/use-student";
 import { ErrorState } from "@/components/shared/state-indicators";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ResultsView } from "@/components/shared/results-view";
 
 export default function StudentResultsPage() {
-  const { data: resultsData, isLoading, error, refetch } = useStudentResults();
+  const { data: resultsData, isLoading: resultsLoading, error: resultsError, refetch: refetchResults } = useStudentResults();
+  const { data: progress } = useStudentProgress();
 
-  if (isLoading) {
+  if (resultsLoading) {
     return (
       <div className="space-y-6">
         <div className="space-y-2">
@@ -23,34 +24,34 @@ export default function StudentResultsPage() {
     );
   }
 
-  if (error || !resultsData) {
+  if (resultsError || !resultsData) {
     return (
       <ErrorState
         title="Could not load academic transcript"
         message={
-          (error as any)?.message ||
+          (resultsError as any)?.message ||
           "An error occurred while fetching your semester examination results."
         }
-        onRetry={() => refetch()}
+        onRetry={() => refetchResults()}
       />
     );
   }
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-1">
+    <div className="space-y-6">
+      <div className="space-y-1 no-print">
         <div className="flex items-center gap-2">
-          <FileText className="h-6 w-6 text-primary" />
+          <FileText className="h-6 w-6 text-jostum-primary" />
           <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Official Academic Results Breakdown
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          Course results grouped by academic session and semester according to the university handbook computation scheme.
+          Course marks grouped chronologically by academic session and semester under the university 5.00 grading system.
         </p>
       </div>
 
-      <ResultsView resultsData={resultsData} />
+      <ResultsView resultsData={resultsData} student={progress?.student} />
     </div>
   );
 }

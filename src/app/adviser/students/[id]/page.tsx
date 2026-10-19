@@ -95,6 +95,7 @@ export default function AdviserStudentDetailPage() {
           ) : (
             <ResultsView
               resultsData={resultsData}
+              student={progress?.student}
               subtitle="Full semester-by-semester breakdown and handbook computations for this student."
             />
           )}
