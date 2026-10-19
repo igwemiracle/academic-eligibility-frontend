@@ -214,7 +214,7 @@ export default function LoginPage() {
 
         {/* Footer Note */}
         <p className="text-center text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-          Prototype built for the Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Not an official university system.
+          Computer Science Eligibility Tracker • Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Official clearance is granted solely by the University Senate and Department Examination Officer.
         </p>
       </div>
     </div>

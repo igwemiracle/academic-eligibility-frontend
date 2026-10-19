@@ -341,8 +341,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </header>
 
         {/* Scrollable Page Content Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto print:overflow-visible print:p-0 print:m-0 print:max-w-none">
-          {children}
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto flex flex-col justify-between print:overflow-visible print:p-0 print:m-0 print:max-w-none">
+          <div className="flex-1">{children}</div>
+
+          {/* App Shell Institutional Footer */}
+          <footer className="mt-12 border-t border-border/60 pt-6 pb-4 text-center text-xs text-muted-foreground no-print space-y-1">
+            <p className="font-semibold text-foreground">
+              Computer Science Eligibility Tracker
+            </p>
+            <p className="text-[11px] leading-relaxed max-w-2xl mx-auto text-muted-foreground">
+              Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Official clearance is granted solely by the University Senate and Department Examination Officer.
+            </p>
+          </footer>
         </main>
       </div>
     </div>

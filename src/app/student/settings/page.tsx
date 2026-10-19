@@ -56,7 +56,7 @@ export default function StudentSettingsPage() {
       <Card className="border shadow-xs">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-primary" />
+            <Shield className="h-5 w-5 text-jostum-primary" />
             <CardTitle className="text-lg font-semibold">Change Account Password</CardTitle>
           </div>
           <CardDescription className="text-xs">
