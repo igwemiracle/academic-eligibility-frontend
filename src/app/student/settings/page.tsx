@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Shield, Loader2, CheckCircle2 } from "@/components/icons";
+import { Lock, Shield, Loader2, CheckCircle2, Eye, EyeOff } from "@/components/icons";
 import { toast } from "sonner";
 import { changePasswordSchema, ChangePasswordFormData } from "@/lib/validation";
 import { useChangePassword } from "@/hooks/use-auth";
@@ -14,6 +14,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 
 export default function StudentSettingsPage() {
   const changePasswordMutation = useChangePassword();
+  const [showCurrentPassword, setShowCurrentPassword] = React.useState(false);
+  const [showNewPassword, setShowNewPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const {
     register,
@@ -72,14 +75,26 @@ export default function StudentSettingsPage() {
                 <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="currentPassword"
-                  type="password"
+                  type={showCurrentPassword ? "text" : "password"}
                   placeholder="••••••••••••"
-                  className="pl-9"
+                  className="pl-9 pr-10"
                   autoComplete="current-password"
                   disabled={changePasswordMutation.isPending}
                   aria-invalid={errors.currentPassword ? "true" : "false"}
                   {...register("currentPassword")}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                  aria-label={showCurrentPassword ? "Hide password" : "Show password"}
+                >
+                  {showCurrentPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
               {errors.currentPassword && (
                 <p className="text-xs text-destructive font-medium" role="alert">
@@ -95,14 +110,26 @@ export default function StudentSettingsPage() {
                 <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="newPassword"
-                  type="password"
+                  type={showNewPassword ? "text" : "password"}
                   placeholder="••••••••••••"
-                  className="pl-9"
+                  className="pl-9 pr-10"
                   autoComplete="new-password"
                   disabled={changePasswordMutation.isPending}
                   aria-invalid={errors.newPassword ? "true" : "false"}
                   {...register("newPassword")}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                  aria-label={showNewPassword ? "Hide password" : "Show password"}
+                >
+                  {showNewPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
               {errors.newPassword && (
                 <p className="text-xs text-destructive font-medium" role="alert">
@@ -118,14 +145,26 @@ export default function StudentSettingsPage() {
                 <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="confirmPassword"
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   placeholder="••••••••••••"
-                  className="pl-9"
+                  className="pl-9 pr-10"
                   autoComplete="new-password"
                   disabled={changePasswordMutation.isPending}
                   aria-invalid={errors.confirmPassword ? "true" : "false"}
                   {...register("confirmPassword")}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
+                </button>
               </div>
               {errors.confirmPassword && (
                 <p className="text-xs text-destructive font-medium" role="alert">

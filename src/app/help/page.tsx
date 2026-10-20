@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import {
   HelpCircle,
   GraduationCap,
@@ -11,54 +10,29 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
-  ArrowRight,
   FileText,
   Calendar,
   Award,
 } from "@/components/icons";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "@/hooks/use-auth";
 
 export default function HelpPage() {
-  const { data: user } = useCurrentUser();
-  const dashboardHref =
-    user?.role === "ADMIN"
-      ? "/admin"
-      : user?.role === "ADVISER"
-      ? "/adviser"
-      : "/student";
-
   return (
     <div className="space-y-8 max-w-5xl mx-auto pb-12">
       {/* Page Header */}
       <div className="rounded-2xl border border-jostum-primary/20 bg-gradient-to-r from-jostum-deep via-jostum-primary to-jostum-bright p-6 sm:p-8 text-white shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs">
-              <HelpCircle className="h-3.5 w-3.5 text-jostum-gold" />
-              <span>User Documentation & Academic Guide</span>
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              System Help & Academic Glossary
-            </h1>
-            <p className="text-sm text-white/80 max-w-2xl leading-relaxed">
-              Clear, step-by-step guidance on how to navigate the Academic Eligibility Tracking System, monitor graduation criteria, and understand university computation rules.
-            </p>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs">
+            <HelpCircle className="h-3.5 w-3.5 text-jostum-gold" />
+            <span>User Documentation & Academic Guide</span>
           </div>
-          <div className="shrink-0 flex sm:flex-col gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              asChild
-              className="bg-white/10 hover:bg-white/20 text-white border-white/20 text-xs gap-1.5"
-            >
-              <Link href={dashboardHref}>
-                Back to Dashboard <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </Button>
-          </div>
+          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+            System Help & Academic Glossary
+          </h1>
+          <p className="text-sm text-white/80 max-w-2xl leading-relaxed">
+            Clear, step-by-step guidance on how to navigate the Academic Eligibility Tracking System, monitor graduation criteria, and understand university computation rules.
+          </p>
         </div>
       </div>
 

@@ -56,6 +56,8 @@ import {
   FloppyDiskIcon,
   ChartIncreaseIcon,
   Layers01Icon,
+  EyeIcon,
+  EyeOffIcon,
 } from "@hugeicons/core-free-icons";
 
 export {
@@ -105,6 +107,8 @@ export {
   FilterIcon,
   ChartHistogramIcon,
   ShieldCheckIcon,
+  EyeIcon,
+  EyeOffIcon,
 };
 
 export type IconProps = {
@@ -193,3 +197,5 @@ export const Trash2 = createIcon(Delete02Icon, "Trash2");
 export const Save = createIcon(FloppyDiskIcon, "Save");
 export const TrendingUp = createIcon(ChartIncreaseIcon, "TrendingUp");
 export const Layers = createIcon(Layers01Icon, "Layers");
+export const Eye = createIcon(EyeIcon, "Eye");
+export const EyeOff = createIcon(EyeOffIcon, "EyeOff");

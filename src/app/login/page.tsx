@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GraduationCap, Lock, Mail, Loader2, ArrowRight } from "@/components/icons";
+import { GraduationCap, Lock, Mail, Loader2, ArrowRight, Eye, EyeOff } from "@/components/icons";
 import { toast } from "sonner";
 import { loginSchema, LoginFormData } from "@/lib/validation";
 import { useLogin } from "@/hooks/use-auth";
@@ -15,6 +15,7 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export default function LoginPage() {
   const loginMutation = useLogin();
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const {
     register,
@@ -119,14 +120,26 @@ export default function LoginPage() {
                   <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="••••••••••••"
-                    className="pl-9"
+                    className="pl-9 pr-10"
                     autoComplete="current-password"
                     disabled={loginMutation.isPending}
                     aria-invalid={errors.password ? "true" : "false"}
                     {...register("password")}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
                 </div>
                 {errors.password && (
                   <p className="text-xs font-medium text-destructive" role="alert">
