@@ -1,9 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GraduationCap, Lock, Mail, Loader2, ArrowRight, Eye, EyeOff } from "@/components/icons";
+import { Lock, Mail, Loader2, ArrowRight, Eye, EyeOff } from "@/components/icons";
 import { toast } from "sonner";
 import { loginSchema, LoginFormData } from "@/lib/validation";
 import { useLogin } from "@/hooks/use-auth";
@@ -63,10 +64,20 @@ export default function LoginPage() {
       <div className="w-full max-w-md space-y-8">
         {/* Header Branding */}
         <div className="flex flex-col items-center text-center">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md mb-4">
-            <GraduationCap className="h-8 w-8" />
+          <div className="relative mb-3 flex items-center justify-center">
+            <Image
+              src="/jostum-logo.png"
+              alt="Joseph Sarwuan Tarka University Makurdi Logo"
+              width={90}
+              height={95}
+              className="h-24 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
+              priority
+            />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+          <span className="text-xs font-semibold uppercase tracking-wider text-jostum-primary">
+            Joseph Sarwuan Tarka University, Makurdi
+          </span>
+          <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Computer Science Eligibility Tracker
           </h1>
           <p className="mt-2 text-sm text-muted-foreground">

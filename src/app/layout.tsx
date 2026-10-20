@@ -11,8 +11,13 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Computer Science Eligibility Tracker",
-  description: "Academic Eligibility Tracking System for Graduation Status Monitoring - Department of Computer Science",
+  title: "Computer Science Eligibility Tracker | JOSTUM",
+  description:
+    "Academic Eligibility Tracking System for Graduation Status Monitoring - Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi",
+  icons: {
+    icon: "/jostum-logo.png",
+    apple: "/jostum-logo.png",
+  },
 };
 
 export default function RootLayout({

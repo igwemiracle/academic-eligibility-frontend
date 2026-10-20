@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Info,
-  GraduationCap,
   Award,
   BookOpen,
   Calendar,
@@ -62,7 +61,13 @@ export function ProgressSummaryView({
   return (
     <div className="space-y-6">
       {/* Print-Only Institutional Header */}
-      <div className="print-only print-header">
+      <div className="print-only print-header text-center pb-4 mb-4 border-b">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/jostum-logo.png"
+          alt="JOSTUM Logo"
+          className="h-20 w-auto mx-auto mb-2 object-contain"
+        />
         <h1 className="text-xl font-bold uppercase tracking-wider text-slate-900">
           Joseph Sarwuan Tarka University, Makurdi
         </h1>
@@ -88,7 +93,8 @@ export function ProgressSummaryView({
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs text-jostum-gold">
-                <GraduationCap className="h-3.5 w-3.5" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/jostum-logo.png" alt="JOSTUM" className="h-4 w-4 object-contain brightness-110" />
                 <span>Computer Science Eligibility Tracker</span>
               </span>
               <Badge variant="outline" className="border-white/30 text-white font-mono text-xs">
@@ -224,7 +230,7 @@ export function ProgressSummaryView({
                     Required Core
                   </span>
                   <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-jostum-primary/10 text-jostum-primary dark:bg-jostum-primary/20">
-                    <GraduationCap className="h-4 w-4" />
+                    <BookOpen className="h-4 w-4" />
                   </span>
                 </div>
               </CardHeader>

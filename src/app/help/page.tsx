@@ -23,8 +23,9 @@ export default function HelpPage() {
       {/* Page Header */}
       <div className="rounded-2xl border border-jostum-primary/20 bg-gradient-to-r from-jostum-deep via-jostum-primary to-jostum-bright p-6 sm:p-8 text-white shadow-sm">
         <div className="space-y-2">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs">
-            <HelpCircle className="h-3.5 w-3.5 text-jostum-gold" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs text-jostum-gold">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/jostum-logo.png" alt="JOSTUM" className="h-4 w-4 object-contain brightness-110" />
             <span>User Documentation & Academic Guide</span>
           </div>
           <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">

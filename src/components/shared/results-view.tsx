@@ -86,7 +86,13 @@ export function ResultsView({ resultsData, student, subtitle }: ResultsViewProps
   return (
     <div className="space-y-8">
       {/* Print-Only Official Header */}
-      <div className="print-only print-header">
+      <div className="print-only print-header text-center pb-4 mb-4 border-b">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/jostum-logo.png"
+          alt="JOSTUM Logo"
+          className="h-20 w-auto mx-auto mb-2 object-contain"
+        />
         <h1 className="text-xl font-bold uppercase tracking-wider text-slate-900">
           Joseph Sarwuan Tarka University, Makurdi
         </h1>

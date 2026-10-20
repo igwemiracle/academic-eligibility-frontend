@@ -11,7 +11,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  GraduationCap,
   Award,
   BookOpen,
 } from "@/components/icons";
@@ -184,7 +183,8 @@ export default function AdviserPage() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-xs text-jostum-gold">
-              <Users className="h-3.5 w-3.5" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/jostum-logo.png" alt="JOSTUM" className="h-4 w-4 object-contain brightness-110" />
               <span>Academic Advisory Portal</span>
             </div>
             <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">

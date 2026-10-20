@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  GraduationCap,
   LayoutDashboard,
   FileText,
   Settings,
@@ -170,13 +170,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Desktop Sidebar - fixed 100dvh with internal scroll container */}
       <aside className="hidden md:flex w-64 h-[100dvh] shrink-0 flex-col border-r border-border bg-card overflow-y-auto print:hidden">
         {/* Brand Header */}
-        <div className="flex h-16 items-center gap-3 border-b border-border px-5 shrink-0">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-xs">
-            <GraduationCap className="h-5 w-5" />
+        <div className="flex h-16 items-center gap-3 border-b border-border px-4 shrink-0">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+            <Image
+              src="/jostum-logo.png"
+              alt="JOSTUM Crest"
+              width={40}
+              height={42}
+              className="h-10 w-auto object-contain drop-shadow-xs"
+              priority
+            />
           </div>
           <div className="flex flex-col min-w-0">
             <span className="font-bold text-xs leading-tight tracking-tight text-foreground truncate">
-              Computer Science
+              JOSTUM • Comp Science
             </span>
             <span className="text-[11px] font-medium text-primary">
               Eligibility Tracker
@@ -255,12 +262,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <SheetContent side="left" className="w-72 p-0 flex flex-col h-full">
                 <SheetHeader className="border-b border-border p-5 text-left shrink-0">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                      <GraduationCap className="h-5 w-5" />
+                    <div className="relative flex h-10 w-10 shrink-0 items-center justify-center">
+                      <Image
+                        src="/jostum-logo.png"
+                        alt="JOSTUM Crest"
+                        width={40}
+                        height={42}
+                        className="h-10 w-auto object-contain"
+                      />
                     </div>
                     <div>
                       <SheetTitle className="text-xs font-bold text-foreground">
-                        Computer Science Eligibility Tracker
+                        JOSTUM Eligibility Tracker
                       </SheetTitle>
                       <p className="text-[11px] text-muted-foreground">
                         Dept. of Computer Science
@@ -299,7 +312,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Sheet>
 
             {/* Department Wordmark in Header */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/jostum-logo.png"
+                alt="JOSTUM Logo"
+                width={28}
+                height={30}
+                className="h-7 w-auto object-contain md:hidden"
+              />
               <span className="font-semibold text-xs sm:text-sm text-foreground">
                 Graduation Monitoring Portal
               </span>
