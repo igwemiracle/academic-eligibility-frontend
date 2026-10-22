@@ -18,16 +18,17 @@ export function useAdminStats() {
   });
 }
 
-export function useAdminUsers(params: { role?: string; search?: string; page?: number } = {}) {
-  const { role = "", search = "", page = 1 } = params;
+export function useAdminUsers(params: { role?: string; search?: string; page?: number; pageSize?: number } = {}) {
+  const { role = "", search = "", page = 1, pageSize = 20 } = params;
 
   return useQuery({
-    queryKey: ["admin", "users", { role, search, page }],
+    queryKey: ["admin", "users", { role, search, page, pageSize }],
     queryFn: () => {
       const searchParams = new URLSearchParams();
       if (role) searchParams.append("role", role);
       if (search) searchParams.append("search", search);
       searchParams.append("page", page.toString());
+      if (pageSize) searchParams.append("pageSize", pageSize.toString());
       return api.get<{ items: User[]; total: number }>(`/admin/users?${searchParams.toString()}`);
     },
   });

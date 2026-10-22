@@ -84,6 +84,12 @@ export default function AdminUsersPage() {
     role: roleFilter === "ALL" ? "" : roleFilter,
   });
 
+  // Dedicated query to fetch all active faculty advisers for assignment dialogs
+  const { data: allAdvisersData, isLoading: advisersLoading } = useAdminUsers({
+    role: "ADVISER",
+    pageSize: 100,
+  });
+
   const createUserMutation = useCreateUser();
   const resetPasswordMutation = useResetPassword();
   const deactivateUserMutation = useDeactivateUser();
@@ -209,7 +215,7 @@ export default function AdminUsersPage() {
     }
   };
 
-  const advisersList = data?.items.filter((u) => u.role === "ADVISER") || [];
+  const advisersList = allAdvisersData?.items || [];
 
   return (
     <div className="space-y-6">
@@ -631,20 +637,30 @@ export default function AdminUsersPage() {
           </DialogHeader>
 
           <div className="space-y-3 py-2">
-            <Label htmlFor="adv-select" className="text-xs">Select Faculty Adviser</Label>
+            <Label htmlFor="adv-select" className="text-xs font-medium">Select Faculty Adviser</Label>
             <Select
               value={selectedAdviserId}
               onValueChange={setSelectedAdviserId}
             >
               <SelectTrigger id="adv-select" className="h-10">
-                <SelectValue placeholder="Choose an adviser..." />
+                <SelectValue placeholder={advisersLoading ? "Loading advisers..." : "Choose an adviser..."} />
               </SelectTrigger>
               <SelectContent>
-                {advisersList.map((adv) => (
-                  <SelectItem key={adv.id} value={adv.id}>
-                    {adv.fullName} ({adv.email})
+                {advisersLoading ? (
+                  <SelectItem value="_loading" disabled>
+                    Loading departmental advisers...
                   </SelectItem>
-                ))}
+                ) : advisersList.length === 0 ? (
+                  <SelectItem value="_none" disabled>
+                    No faculty advisers found
+                  </SelectItem>
+                ) : (
+                  advisersList.map((adv) => (
+                    <SelectItem key={adv.id} value={adv.id}>
+                      {adv.fullName} ({adv.email})
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
