@@ -14,6 +14,9 @@ import {
   UserCheck,
   Loader2,
   CheckCircle2,
+  Lock,
+  Eye,
+  EyeOff,
 } from "@/components/icons";
 import { toast } from "sonner";
 import {
@@ -68,6 +71,10 @@ export default function AdminUsersPage() {
   const [roleFilter, setRoleFilter] = React.useState("ALL");
   const [createDialogOpen, setCreateDialogOpen] = React.useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
+  const [resetDialogOpen, setResetDialogOpen] = React.useState(false);
+  const [selectedUserForReset, setSelectedUserForReset] = React.useState<User | null>(null);
+  const [newPassword, setNewPassword] = React.useState("Password123!");
+  const [showResetPassword, setShowResetPassword] = React.useState(false);
   const [selectedStudentForAdviser, setSelectedStudentForAdviser] = React.useState<User | null>(null);
   const [selectedAdviserId, setSelectedAdviserId] = React.useState("");
 
@@ -133,14 +140,29 @@ export default function AdminUsersPage() {
     }
   };
 
-  const handleResetPassword = async (user: User) => {
-    if (confirm(`Reset password for ${user.fullName} (${user.email})?`)) {
-      try {
-        await resetPasswordMutation.mutateAsync(user.id);
-        toast.success(`Password reset generated for ${user.fullName}`);
-      } catch (err: any) {
-        toast.error(err?.message || "Failed to reset password");
-      }
+  const handleOpenResetDialog = (user: User) => {
+    setSelectedUserForReset(user);
+    setNewPassword("Password123!");
+    setShowResetPassword(false);
+    setResetDialogOpen(true);
+  };
+
+  const handleConfirmResetPassword = async () => {
+    if (!selectedUserForReset) return;
+    if (!newPassword || newPassword.length < 8) {
+      toast.error("Password must be at least 8 characters long");
+      return;
+    }
+
+    try {
+      await resetPasswordMutation.mutateAsync({
+        userId: selectedUserForReset.id,
+        newPassword,
+      });
+      toast.success(`Password for ${selectedUserForReset.fullName} has been reset successfully`);
+      setResetDialogOpen(false);
+    } catch (err: any) {
+      toast.error(err?.message || "Failed to reset password");
     }
   };
 
@@ -547,7 +569,7 @@ export default function AdminUsersPage() {
                           size="sm"
                           className="h-8 px-2 text-xs"
                           title="Reset Password"
-                          onClick={() => handleResetPassword(user)}
+                          onClick={() => handleOpenResetDialog(user)}
                         >
                           <KeyRound className="h-3.5 w-3.5" />
                         </Button>
@@ -612,6 +634,70 @@ export default function AdminUsersPage() {
               disabled={assignAdviserMutation.isPending || !selectedAdviserId}
             >
               {assignAdviserMutation.isPending ? "Assigning..." : "Confirm Assignment"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Reset Password Dialog */}
+      <Dialog open={resetDialogOpen} onOpenChange={setResetDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <KeyRound className="h-4 w-4 text-jostum-primary" />
+              Reset User Password
+            </DialogTitle>
+            <DialogDescription>
+              Set a new password for <strong>{selectedUserForReset?.fullName}</strong> ({selectedUserForReset?.email}).
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-3 py-2">
+            <Label htmlFor="reset-new-password" className="text-xs font-medium">
+              New Password
+            </Label>
+            <div className="relative">
+              <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                id="reset-new-password"
+                type={showResetPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                placeholder="Minimum 8 characters"
+                className="pl-9 pr-10"
+                disabled={resetPasswordMutation.isPending}
+              />
+              <button
+                type="button"
+                onClick={() => setShowResetPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                aria-label={showResetPassword ? "Hide password" : "Show password"}
+              >
+                {showResetPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
+              </button>
+            </div>
+            <p className="text-[11px] text-muted-foreground">
+              The password must be at least 8 characters long. A temporary default is pre-filled.
+            </p>
+          </div>
+
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setResetDialogOpen(false)}
+              disabled={resetPasswordMutation.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmResetPassword}
+              disabled={resetPasswordMutation.isPending || !newPassword || newPassword.length < 8}
+            >
+              {resetPasswordMutation.isPending ? "Resetting..." : "Confirm Password Reset"}
             </Button>
           </DialogFooter>
         </DialogContent>
