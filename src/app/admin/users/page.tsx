@@ -24,6 +24,7 @@ import {
   useCreateUser,
   useResetPassword,
   useDeactivateUser,
+  useReactivateUser,
   useAssignAdviser,
 } from "@/hooks/use-admin";
 import { Role, User } from "@/lib/types";
@@ -86,6 +87,7 @@ export default function AdminUsersPage() {
   const createUserMutation = useCreateUser();
   const resetPasswordMutation = useResetPassword();
   const deactivateUserMutation = useDeactivateUser();
+  const reactivateUserMutation = useReactivateUser();
   const assignAdviserMutation = useAssignAdviser();
 
   // Student Form
@@ -173,6 +175,17 @@ export default function AdminUsersPage() {
         toast.success(`User ${user.fullName} deactivated`);
       } catch (err: any) {
         toast.error(err?.message || "Failed to deactivate user");
+      }
+    }
+  };
+
+  const handleReactivate = async (user: User) => {
+    if (confirm(`Reactivate account for ${user.fullName} (${user.email})?`)) {
+      try {
+        await reactivateUserMutation.mutateAsync(user.id);
+        toast.success(`User ${user.fullName} reactivated successfully`);
+      } catch (err: any) {
+        toast.error(err?.message || "Failed to reactivate user");
       }
     }
   };
@@ -573,15 +586,29 @@ export default function AdminUsersPage() {
                         >
                           <KeyRound className="h-3.5 w-3.5" />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-8 px-2 text-xs text-destructive hover:text-destructive"
-                          title="Deactivate Account"
-                          onClick={() => handleDeactivate(user)}
-                        >
-                          <UserX className="h-3.5 w-3.5" />
-                        </Button>
+                        {user.isActive === false ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 px-2 text-xs text-jostum-primary hover:text-jostum-primary hover:bg-jostum-soft/40"
+                            title="Reactivate Account"
+                            onClick={() => handleReactivate(user)}
+                            disabled={reactivateUserMutation.isPending}
+                          >
+                            <UserCheck className="h-3.5 w-3.5" />
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 px-2 text-xs text-destructive hover:text-destructive"
+                            title="Deactivate Account"
+                            onClick={() => handleDeactivate(user)}
+                            disabled={deactivateUserMutation.isPending}
+                          >
+                            <UserX className="h-3.5 w-3.5" />
+                          </Button>
+                        )}
                       </div>
                     </TableCell>
                   </TableRow>

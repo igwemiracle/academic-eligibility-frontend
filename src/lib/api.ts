@@ -213,6 +213,10 @@ async function handleMockRequest<T>(
     return { message: "User account deactivated" } as T;
   }
 
+  if (cleanEndpoint.startsWith("/admin/users/") && method === "PATCH") {
+    return { message: "User account updated successfully" } as T;
+  }
+
   if (cleanEndpoint.startsWith("/admin/students/") && cleanEndpoint.endsWith("/adviser") && method === "POST") {
     return { message: "Adviser successfully assigned to student" } as T;
   }
