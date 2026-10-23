@@ -4,14 +4,21 @@ import * as React from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Mail, Loader2, ArrowRight, Eye, EyeOff } from "@/components/icons";
+import {
+  Lock,
+  Mail,
+  Loader2,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  ShieldCheck,
+} from "@/components/icons";
 import { toast } from "sonner";
 import { loginSchema, LoginFormData } from "@/lib/validation";
 import { useLogin } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 
 export default function LoginPage() {
@@ -55,58 +62,83 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
-      {/* Top right theme toggle */}
-      <div className="absolute right-4 top-4">
+    <main className="relative flex min-h-screen w-full items-center justify-center px-4 py-12 sm:px-6">
+      {/* Background: Campus Entrance Photo with JOSTUM Green Overlay */}
+      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none">
+        <Image
+          src="/jostum-campus.jpg"
+          alt="Joseph Sarwuan Tarka University Campus Entrance"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center scale-105 transition-transform duration-1000 ease-out"
+          quality={85}
+        />
+        {/* Deep JOSTUM emerald green tint / multiply overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#02271d]/90 via-[#054635]/80 to-[#022F24]/95 mix-blend-multiply" />
+        {/* Subtle radial vignette & backdrop blur */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(2,47,36,0.65)_100%)] backdrop-blur-[2px]" />
+      </div>
+
+      {/* Top right glass theme toggle */}
+      <div className="absolute right-4 top-4 z-20 rounded-full bg-white/20 dark:bg-black/30 backdrop-blur-md border border-white/30 dark:border-white/10 p-1 shadow-lg transition-transform hover:scale-105">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md space-y-8">
-        {/* Header Branding */}
-        <div className="flex flex-col items-center text-center">
-          <div className="relative mb-3 flex items-center justify-center">
-            <Image
-              src="/jostum-logo.png"
-              alt="Joseph Sarwuan Tarka University Makurdi Logo"
-              width={90}
-              height={95}
-              className="h-24 w-auto object-contain drop-shadow-sm transition-transform hover:scale-105"
-              priority
-            />
-          </div>
-          <span className="text-xs font-semibold uppercase tracking-wider text-jostum-primary">
-            Joseph Sarwuan Tarka University, Makurdi
-          </span>
-          <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
-            Computer Science Eligibility Tracker
-          </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Academic Eligibility Tracking System for Graduation Status Monitoring
-          </p>
-        </div>
+      {/* Center Auth Card */}
+      <div className="relative z-10 w-full max-w-[430px]">
+        <div className="overflow-hidden rounded-3xl bg-white/95 dark:bg-card/95 backdrop-blur-xl shadow-2xl border border-white/40 dark:border-white/10">
+          {/* Top accent gradient bar (JOSTUM green -> gold) */}
+          <div className="h-2 w-full bg-gradient-to-r from-emerald-500 via-[#0A8760] to-[#EF960A]" />
 
-        {/* Login Card */}
-        <Card className="border shadow-lg">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-semibold">Sign in</CardTitle>
-            <CardDescription>
-              Enter your institutional credentials to check graduation eligibility
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
+          {/* Card Header with Crest and Branding */}
+          <div className="pt-6 pb-4 px-6 sm:px-8 flex flex-col items-center text-center">
+            {/* Circular Crest Badge */}
+            <div className="relative mb-3 flex h-20 w-20 items-center justify-center rounded-full bg-white p-2.5 shadow-md ring-4 ring-emerald-500/10 transition-transform hover:scale-105">
+              <Image
+                src="/jostum-logo.png"
+                alt="Joseph Sarwuan Tarka University Logo"
+                width={72}
+                height={72}
+                className="h-full w-full object-contain"
+                priority
+              />
+            </div>
+
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+              Portal Sign In
+            </h1>
+            <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Joseph Sarwuan Tarka University, Makurdi
+            </p>
+
+            {/* Department Tracker Badge */}
+            <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 px-3 py-1 text-[11px] font-medium text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40">
+              <GraduationCap className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+              <span>Computer Science Eligibility Tracker</span>
+            </div>
+          </div>
+
+          {/* Form Content */}
+          <div className="px-6 sm:px-8 pb-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-              {/* Email Field */}
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
+              {/* Institutional Email Field */}
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="email"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-200"
+                >
                   Institutional Email
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
+                <div className="relative flex items-center rounded-xl bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
+                  <div className="pointer-events-none absolute left-3.5 flex items-center text-emerald-600 dark:text-emerald-400">
+                    <Mail className="h-4 w-4" />
+                  </div>
+                  <input
                     id="email"
                     type="email"
                     placeholder="student@cs.edu.ng"
-                    className="pl-9"
+                    className="h-11 w-full bg-transparent pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     autoComplete="email"
                     disabled={loginMutation.isPending}
                     aria-invalid={errors.email ? "true" : "false"}
@@ -114,26 +146,29 @@ export default function LoginPage() {
                   />
                 </div>
                 {errors.email && (
-                  <p className="text-xs font-medium text-destructive" role="alert">
+                  <p className="text-xs font-medium text-destructive mt-1" role="alert">
                     {errors.email.message}
                   </p>
                 )}
               </div>
 
               {/* Password Field */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password" className="text-sm font-medium">
-                    Password
-                  </Label>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="password"
+                  className="text-xs font-semibold text-slate-700 dark:text-slate-200"
+                >
+                  Password
+                </Label>
+                <div className="relative flex items-center rounded-xl bg-slate-100/90 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800 focus-within:border-emerald-500 focus-within:ring-2 focus-within:ring-emerald-500/20 transition-all">
+                  <div className="pointer-events-none absolute left-3.5 flex items-center text-emerald-600 dark:text-emerald-400">
+                    <Lock className="h-4 w-4" />
+                  </div>
+                  <input
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••••••"
-                    className="pl-9 pr-10"
+                    className="h-11 w-full bg-transparent pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     autoComplete="current-password"
                     disabled={loginMutation.isPending}
                     aria-invalid={errors.password ? "true" : "false"}
@@ -142,7 +177,7 @@ export default function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors focus:outline-hidden focus-visible:ring-2 focus-visible:ring-ring rounded-xs"
+                    className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-sm focus:outline-none"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -153,15 +188,16 @@ export default function LoginPage() {
                   </button>
                 </div>
                 {errors.password && (
-                  <p className="text-xs font-medium text-destructive" role="alert">
+                  <p className="text-xs font-medium text-destructive mt-1" role="alert">
                     {errors.password.message}
                   </p>
                 )}
               </div>
 
+              {/* Sign In CTA Button */}
               <Button
                 type="submit"
-                className="w-full gap-2 mt-2"
+                className="w-full h-11 mt-2 rounded-xl bg-[#054635] hover:bg-[#022F24] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold shadow-md shadow-[#054635]/20 gap-2 transition-all active:scale-[0.99] group"
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? (
@@ -171,76 +207,79 @@ export default function LoginPage() {
                   </>
                 ) : (
                   <>
-                    Sign in to Portal
-                    <ArrowRight className="h-4 w-4" />
+                    Sign In to Portal
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </>
                 )}
               </Button>
             </form>
-          </CardContent>
+          </div>
 
           {/* Quick Demo Credentials Assistant */}
-          <CardFooter className="flex flex-col border-t bg-muted/20 p-4 space-y-2">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Demo Credentials (Click to prefill)
-            </span>
-            <div className="grid grid-cols-3 gap-2 w-full text-xs">
-              <Button
+          <div className="border-t border-slate-200/80 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-950/40 p-4 space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                Demo Accounts (Click to Fill)
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-1.5 text-xs">
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-[11px] h-8 truncate"
                 onClick={() => handleDemoFill("student_a_eligible@cs.edu.ng")}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                title="Student (Eligible)"
               >
                 Student (Eligible)
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-[11px] h-8 truncate"
                 onClick={() => handleDemoFill("student_b_shortunits@cs.edu.ng")}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                title="Student (Short)"
               >
                 Student (Short)
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-[11px] h-8 truncate"
                 onClick={() => handleDemoFill("adviser1@cs.edu.ng")}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                title="Adviser"
               >
                 Adviser
-              </Button>
+              </button>
             </div>
-            <div className="grid grid-cols-2 gap-2 w-full text-xs">
-              <Button
+            <div className="grid grid-cols-2 gap-1.5 text-xs">
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-[11px] h-8 truncate"
                 onClick={() => handleDemoFill("student_j_de_eligible@cs.edu.ng")}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                title="Direct Entry"
               >
                 Direct Entry
-              </Button>
-              <Button
+              </button>
+              <button
                 type="button"
-                variant="outline"
-                size="sm"
-                className="text-[11px] h-8 truncate"
                 onClick={() => handleDemoFill("admin@cs.edu.ng")}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                title="Exam Officer / Admin"
               >
                 Exam Officer / Admin
-              </Button>
+              </button>
             </div>
-          </CardFooter>
-        </Card>
+          </div>
+        </div>
 
         {/* Footer Note */}
-        <p className="text-center text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
-          Computer Science Eligibility Tracker • Department of Computer Science, Joseph Sarwuan Tarka University, Makurdi. Official clearance is granted solely by the University Senate and Department Examination Officer.
-        </p>
+        <div className="mt-5 text-center text-xs text-white/85 max-w-sm mx-auto leading-relaxed drop-shadow-sm space-y-1">
+          <p className="font-semibold text-white">
+            Joseph Sarwuan Tarka University, Makurdi
+          </p>
+          <p className="text-[11px] text-white/75">
+            Department of Computer Science • Graduation Clearance Portal
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }
