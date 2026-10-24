@@ -260,7 +260,7 @@ export default function HelpPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Cumulative Grade Point Average:</strong> The overall weighted average of grade points earned across all semesters, computed as <code>Total Points Earned (TPE) / Total Credit Units Carried (TCC)</code> on a 5.00 grading scale.
+              <strong>Cumulative Grade Point Average:</strong> The overall weighted average of grade points earned across all semesters, computed as <code>Cumulative Points Earned (CPE) / Cumulative Credit Units Carried (CCC)</code> on a 5.00 grading scale.
             </CardContent>
           </Card>
 
@@ -272,7 +272,7 @@ export default function HelpPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Grade Point Average:</strong> The performance index for a single academic semester, calculated as <code>Current Points Earned (CPE) / Current Credit Units Carried (CCC)</code>.
+              <strong>Grade Point Average:</strong> The performance index for a single academic semester, computed as <code>Total Points Earned (TPE) / Total Credit Units Carried (TCC)</code>.
             </CardContent>
           </Card>
 
@@ -280,12 +280,12 @@ export default function HelpPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-bold text-jostum-primary flex items-center justify-between">
                 <span>TCC vs TCE</span>
-                <Badge variant="secondary" className="font-mono text-[10px]">Units</Badge>
+                <Badge variant="secondary" className="font-mono text-[10px]">Semester Units</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              <strong>TCC (Total Credit Units Carried):</strong> Total credit units registered across all semesters.<br />
-              <strong>TCE (Total Credit Units Earned):</strong> Total credit units passed (grade A through E). Failed courses (F) are included in TCC but not in TCE.
+              <strong>TCC (Total Credit Units Carried):</strong> Total credit units registered in that specific semester.<br />
+              <strong>TCE (Total Credit Units Earned):</strong> Total credit units passed (grade A through E) in that specific semester. Failed courses (F) are included in TCC but not in TCE.
             </CardContent>
           </Card>
 
@@ -293,11 +293,11 @@ export default function HelpPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-bold text-jostum-primary flex items-center justify-between">
                 <span>TPE</span>
-                <Badge variant="secondary" className="font-mono text-[10px]">Points</Badge>
+                <Badge variant="secondary" className="font-mono text-[10px]">Semester Points</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              <strong>Total Points Earned:</strong> The sum of all quality points accrued across all courses. Quality points for each course equal <code>Units × Grade Point (A=5, B=4, C=3, D=2, E=1, F=0)</code>.
+              <strong>Total Points Earned:</strong> The sum of quality points accrued for courses in that specific semester. Quality points for each course equal <code>Units × Grade Point (A=5, B=4, C=3, D=2, E=1, F=0)</code>.
             </CardContent>
           </Card>
 
@@ -305,11 +305,11 @@ export default function HelpPage() {
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-bold text-jostum-primary flex items-center justify-between">
                 <span>CCC, CCE & CPE</span>
-                <Badge variant="secondary" className="font-mono text-[10px]">Semester Units</Badge>
+                <Badge variant="secondary" className="font-mono text-[10px]">Cumulative Metrics</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              Semester-level metrics: <strong>CCC</strong> is Current Credit Units Carried, <strong>CCE</strong> is Current Credit Units Earned (passed), and <strong>CPE</strong> is Current Points Earned for that specific semester.
+              Cumulative metrics across all sessions: <strong>CCC</strong> is Cumulative Credit Units Carried (including failed and repeated courses), <strong>CCE</strong> is Cumulative Credit Units Earned (courses passed), and <strong>CPE</strong> is Cumulative Points Earned across all semesters.
             </CardContent>
           </Card>
 
