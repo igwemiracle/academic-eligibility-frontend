@@ -24,12 +24,13 @@ import { ThemeToggle } from "@/components/layout/theme-toggle";
 export default function LoginPage() {
   const loginMutation = useLogin();
   const [showPassword, setShowPassword] = React.useState(false);
+  const [isRedirecting, setIsRedirecting] = React.useState(false);
 
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -38,10 +39,14 @@ export default function LoginPage() {
     },
   });
 
+  const isPending = loginMutation.isPending || isSubmitting || isRedirecting;
+
   const onSubmit = async (data: LoginFormData) => {
+    if (isPending) return;
     try {
       const user = await loginMutation.mutateAsync(data);
-      toast.success("Signed in successfully");
+      setIsRedirecting(true);
+      toast.success("Signed in successfully. Redirecting to portal...");
       const target =
         user?.role === "STUDENT"
           ? "/student"
@@ -52,11 +57,13 @@ export default function LoginPage() {
           : "/student";
       window.location.href = target;
     } catch (err: any) {
+      setIsRedirecting(false);
       toast.error(err?.message || "Invalid email or password");
     }
   };
 
   const handleDemoFill = (email: string) => {
+    if (isPending) return;
     setValue("email", email, { shouldValidate: true });
     setValue("password", "Password123!", { shouldValidate: true });
   };
@@ -140,7 +147,7 @@ export default function LoginPage() {
                     placeholder="student@cs.edu.ng"
                     className="h-11 w-full bg-transparent pl-10 pr-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     autoComplete="email"
-                    disabled={loginMutation.isPending}
+                    disabled={isPending}
                     aria-invalid={errors.email ? "true" : "false"}
                     {...register("email")}
                   />
@@ -170,14 +177,15 @@ export default function LoginPage() {
                     placeholder="••••••••••••"
                     className="h-11 w-full bg-transparent pl-10 pr-10 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                     autoComplete="current-password"
-                    disabled={loginMutation.isPending}
+                    disabled={isPending}
                     aria-invalid={errors.password ? "true" : "false"}
                     {...register("password")}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-sm focus:outline-none"
+                    disabled={isPending}
+                    className="absolute right-3 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-sm focus:outline-none disabled:opacity-50 disabled:pointer-events-none"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? (
@@ -197,13 +205,13 @@ export default function LoginPage() {
               {/* Sign In CTA Button */}
               <Button
                 type="submit"
-                className="w-full h-11 mt-2 rounded-xl bg-[#054635] hover:bg-[#022F24] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold shadow-md shadow-[#054635]/20 gap-2 transition-all active:scale-[0.99] group"
-                disabled={loginMutation.isPending}
+                className="w-full h-11 mt-2 rounded-xl bg-[#054635] hover:bg-[#022F24] dark:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold shadow-md shadow-[#054635]/20 gap-2 transition-all active:scale-[0.99] group disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isPending}
               >
-                {loginMutation.isPending ? (
+                {isPending ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Signing in...
+                    {isRedirecting ? "Redirecting to portal..." : "Signing in..."}
                   </>
                 ) : (
                   <>
@@ -227,7 +235,8 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleDemoFill("student_a_eligible@cs.edu.ng")}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                disabled={isPending}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center disabled:opacity-50 disabled:pointer-events-none"
                 title="Student (Eligible)"
               >
                 Student (Eligible)
@@ -235,7 +244,8 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleDemoFill("student_b_shortunits@cs.edu.ng")}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                disabled={isPending}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center disabled:opacity-50 disabled:pointer-events-none"
                 title="Student (Short)"
               >
                 Student (Short)
@@ -243,7 +253,8 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleDemoFill("adviser1@cs.edu.ng")}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                disabled={isPending}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center disabled:opacity-50 disabled:pointer-events-none"
                 title="Adviser"
               >
                 Adviser
@@ -253,7 +264,8 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleDemoFill("student_j_de_eligible@cs.edu.ng")}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                disabled={isPending}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center disabled:opacity-50 disabled:pointer-events-none"
                 title="Direct Entry"
               >
                 Direct Entry
@@ -261,7 +273,8 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => handleDemoFill("admin@cs.edu.ng")}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center"
+                disabled={isPending}
+                className="h-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-2 text-[11px] font-medium text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300 dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300 transition-colors truncate text-center disabled:opacity-50 disabled:pointer-events-none"
                 title="Exam Officer / Admin"
               >
                 Exam Officer / Admin
