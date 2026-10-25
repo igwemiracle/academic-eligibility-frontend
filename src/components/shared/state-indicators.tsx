@@ -2,6 +2,7 @@ import * as React from "react";
 import { AlertCircle, RefreshCw, FolderSearch } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { handleUnauthorized } from "@/lib/api";
 
 interface ErrorStateProps {
   title?: string;
@@ -16,6 +17,37 @@ export function ErrorState({
   onRetry,
   className,
 }: ErrorStateProps) {
+  const isAuthError =
+    message.toLowerCase().includes("expired") ||
+    message.toLowerCase().includes("access token") ||
+    message.toLowerCase().includes("unauthorized") ||
+    message.toLowerCase().includes("authentication required");
+
+  React.useEffect(() => {
+    if (isAuthError) {
+      handleUnauthorized();
+    }
+  }, [isAuthError]);
+
+  if (isAuthError) {
+    return (
+      <div
+        role="alert"
+        className={`flex flex-col items-center justify-center rounded-2xl border border-amber-500/20 bg-amber-500/10 p-8 text-center text-card-foreground shadow-xs ${
+          className || ""
+        }`}
+      >
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-400 mb-3">
+          <AlertCircle className="h-6 w-6" aria-hidden="true" />
+        </div>
+        <h3 className="text-base font-semibold text-foreground">Session Expired</h3>
+        <p className="mt-1 max-w-md text-sm text-muted-foreground">
+          Your access token has expired. Redirecting you to sign in...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div
       role="alert"

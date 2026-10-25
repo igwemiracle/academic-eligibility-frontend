@@ -20,7 +20,7 @@ export function RoleGuard({ children, allowedRoles }: RoleGuardProps) {
 
   React.useEffect(() => {
     if (!isLoading && !user && error) {
-      router.push("/login");
+      router.push("/login?expired=true");
     }
   }, [user, isLoading, error, router]);
 

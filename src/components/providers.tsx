@@ -1,14 +1,29 @@
 "use client";
 
 import * as React from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Toaster } from "sonner";
+import { handleUnauthorized } from "@/lib/api";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = React.useState(
     () =>
       new QueryClient({
+        queryCache: new QueryCache({
+          onError: (error: any) => {
+            if (error?.status === 401) {
+              handleUnauthorized();
+            }
+          },
+        }),
+        mutationCache: new MutationCache({
+          onError: (error: any) => {
+            if (error?.status === 401) {
+              handleUnauthorized();
+            }
+          },
+        }),
         defaultOptions: {
           queries: {
             staleTime: 60 * 1000,

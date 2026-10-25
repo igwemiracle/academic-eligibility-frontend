@@ -13,6 +13,7 @@ import {
   EyeOff,
   GraduationCap,
   ShieldCheck,
+  AlertCircle,
 } from "@/components/icons";
 import { toast } from "sonner";
 import { loginSchema, LoginFormData } from "@/lib/validation";
@@ -25,6 +26,18 @@ export default function LoginPage() {
   const loginMutation = useLogin();
   const [showPassword, setShowPassword] = React.useState(false);
   const [isRedirecting, setIsRedirecting] = React.useState(false);
+  const [sessionExpired, setSessionExpired] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("expired") === "true") {
+        setSessionExpired(true);
+        toast.error("Your session has expired. Please sign in again.");
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+    }
+  }, []);
 
   const {
     register,
@@ -128,6 +141,20 @@ export default function LoginPage() {
 
           {/* Form Content */}
           <div className="px-6 sm:px-8 pb-6">
+            {sessionExpired && (
+              <div
+                role="alert"
+                className="mb-4 flex items-start gap-2.5 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-900 dark:text-amber-200"
+              >
+                <AlertCircle className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400 mt-0.5" />
+                <div>
+                  <p className="font-semibold">Session Expired</p>
+                  <p className="mt-0.5 text-[11px] text-amber-800/90 dark:text-amber-200/80">
+                    Your access session has timed out. Please enter your credentials to log in again.
+                  </p>
+                </div>
+              </div>
+            )}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
               {/* Institutional Email Field */}
               <div className="space-y-1.5">

@@ -319,6 +319,29 @@ async function handleMockRequest<T>(
   throw new ApiError(404, "NOT_FOUND", `Endpoint ${method} ${cleanEndpoint} not found`);
 }
 
+let isHandlingUnauthorized = false;
+
+export function handleUnauthorized(endpoint = ""): void {
+  if (typeof window === "undefined") return;
+
+  const cleanEndpoint = endpoint.split("?")[0];
+  // Do not redirect on failed login attempts (e.g. wrong password)
+  if (cleanEndpoint === "/auth/login") return;
+
+  try {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("mock_current_user");
+    document.cookie = "access_token=; path=/; max-age=0; SameSite=Lax";
+  } catch {
+    // ignore storage errors
+  }
+
+  if (!isHandlingUnauthorized && !window.location.pathname.startsWith("/login")) {
+    isHandlingUnauthorized = true;
+    window.location.href = "/login?expired=true";
+  }
+}
+
 async function fetchWithAuth<T>(
   endpoint: string,
   options: RequestInit = {}
@@ -356,6 +379,9 @@ async function fetchWithAuth<T>(
           errData = await res.json();
         } catch {
           // ignore json parse error
+        }
+        if (res.status === 401) {
+          handleUnauthorized(endpoint);
         }
         throw new ApiError(
           res.status,
@@ -400,6 +426,9 @@ async function fetchWithAuth<T>(
     } catch {
       // ignore json parse error
     }
+    if (res.status === 401) {
+      handleUnauthorized(endpoint);
+    }
     throw new ApiError(
       res.status,
       errData?.error?.code || `HTTP_${res.status}`,
@@ -425,9 +454,11 @@ export const api = {
       if (typeof window !== "undefined") {
         if (endpoint.includes("/auth/login") && res?.token) {
           localStorage.setItem("access_token", res.token);
+          isHandlingUnauthorized = false;
         }
         if (endpoint.includes("/auth/logout")) {
           localStorage.removeItem("access_token");
+          isHandlingUnauthorized = false;
         }
       }
       return res;
