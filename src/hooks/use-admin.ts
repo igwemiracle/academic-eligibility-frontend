@@ -15,6 +15,7 @@ export function useAdminStats() {
   return useQuery({
     queryKey: ["admin", "stats"],
     queryFn: () => api.get<AdminStats>("/admin/stats"),
+    placeholderData: (previousData) => previousData,
   });
 }
 
@@ -31,6 +32,7 @@ export function useAdminUsers(params: { role?: string; search?: string; page?: n
       if (pageSize) searchParams.append("pageSize", pageSize.toString());
       return api.get<{ items: User[]; total: number }>(`/admin/users?${searchParams.toString()}`);
     },
+    placeholderData: (previousData) => previousData,
   });
 }
 

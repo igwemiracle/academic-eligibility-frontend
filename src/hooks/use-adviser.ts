@@ -31,6 +31,7 @@ export function useAdviserStudents(params: AdviserStudentQueryParams = {}) {
         `/adviser/students?${searchParams.toString()}`
       );
     },
+    placeholderData: (previousData) => previousData,
   });
 }
 

@@ -26,8 +26,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         }),
         defaultOptions: {
           queries: {
-            staleTime: 60 * 1000,
-            refetchOnWindowFocus: false,
+            staleTime: 5 * 60 * 1000, // 5 minutes: data is fresh, instant tab transitions
+            gcTime: 15 * 60 * 1000, // 15 minutes: retain in browser memory
+            refetchOnWindowFocus: false, // Don't refetch on switching browser tabs
+            refetchOnReconnect: false,
             retry: (failureCount, error: any) => {
               if (error?.status === 401 || error?.status === 403 || error?.status === 404) {
                 return false;
